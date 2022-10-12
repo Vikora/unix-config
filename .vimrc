@@ -20,6 +20,8 @@ set smarttab
 set shiftwidth=4
 set tabstop=4
 
+" Auto-indents for new lines
+set ai
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "=> Convert to UNIX fileformat (avoid CRLF)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -28,4 +30,15 @@ set fileformat=unix
 "Set every files as Unix (LF) as Windows might set CRLF wich is not working
 "for unix
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vim-plug For Managing Plugins
+" To install:
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+call plug#begin('~/.vim/plugged')
+"{{ Syntax Highlighting and Colors }}
+    Plug 'ap/vim-css-color'                            " Color previews for CSS
+call plug#end()
 
