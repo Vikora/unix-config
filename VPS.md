@@ -1,10 +1,6 @@
 # Initial VPS Setup (Debian) for VPN
 
-This guide covers the first steps to secure and prepare a fresh Debian VPS before configuring it for VPN usage.
-
----
-
-## 1. Connect to Your VPS
+## Connect to the VPS
 
 From your local machine:
 
@@ -12,9 +8,7 @@ From your local machine:
 ssh root@your_vps_ip
 ```
 
----
-
-## 2. Create a New User
+## Create a New User
 
 It's best practice to avoid using `root` directly. Create a new user (replace `username` with your preferred login name):
 
@@ -28,23 +22,71 @@ Grant the user administrative privileges:
 usermod -aG sudo username
 ```
 
+## Install Essential Packages
+
+Update packages and install useful tools:
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y vim git curl wget ufw
+```
+
 ---
 
-## 3. Configure SSH Access
+## Configure SSH Access
 
 ### Copy Your SSH Key
 
-On your local machine, generate a key if you don’t already have one:
+On your local machine, generate a key:
 
 ```bash
-ssh-keygen -t ed25519
+cd .ssh
+ssh-keygen -t ed25519 -C "your_email@example.com"
 ```
+Enter file in which to save the key (/home/user/.ssh/id_ed25519).
+Enter passphrase for "id_ed25519" (empty for no passphrase).
 
 Copy the public key to your VPS:
 
 ```bash
 ssh-copy-id username@your_vps_ip
 ```
+
+### Use Short Hostnames for Easier Connections
+
+Instead of typing `ssh username@192.168.1.0`, you can define a short alias.
+
+Edit or create the SSH config file on your local machine:
+
+```bash
+vim ~/.ssh/config
+```
+
+Add an entry:
+
+```
+Host myvps
+    HostName 192.168.1.0
+    User username
+    IdentityFile ~/.ssh/vps_ed25519
+```
+
+Now connect simply with:
+
+```bash
+ssh myvps
+```
+
+You can add as many servers as you like with different aliases.
+
+Alternative (local only, not recommended for multiple servers):
+You can add entries in `/etc/hosts` to map IP → name, e.g.
+
+```
+192.168.1.0 myvps
+```
+
+Then `ssh username@myvps` will also work.
 
 ### Disable Root and Password Login
 
@@ -71,17 +113,6 @@ Now reconnect as your new user:
 
 ```bash
 ssh username@your_vps_ip
-```
-
----
-
-## 4. Install Essential Packages
-
-Update packages and install useful tools:
-
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y vim git curl wget ufw
 ```
 
 ---
@@ -118,4 +149,3 @@ sudo ufw status
 ---
 
 ✅ At this point, your VPS is secured and ready for VPN configuration.
-
