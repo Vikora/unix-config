@@ -8,6 +8,18 @@ From your local machine:
 ssh root@your_vps_ip
 ```
 
+## Install Essential Packages
+
+Update packages and install useful tools:
+
+```bash
+apt update && apt upgrade -y
+```
+
+```bash
+apt install -y sudo vim git curl wget ufw
+```
+
 ## Create a New User
 
 It's best practice to avoid using `root` directly. Create a new user (replace `username` with your preferred login name):
@@ -22,17 +34,6 @@ Grant the user administrative privileges:
 usermod -aG sudo username
 ```
 
-## Install Essential Packages
-
-Update packages and install useful tools:
-
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y vim git curl wget ufw
-```
-
----
-
 ## Configure SSH Access
 
 ### Copy Your SSH Key
@@ -46,15 +47,23 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 Enter file in which to save the key (/home/user/.ssh/id_ed25519).
 Enter passphrase for "id_ed25519" (empty for no passphrase).
 
-Copy the public key to your VPS:
+Copy the public key to your VPS.
+
+Linux:
 
 ```bash
 ssh-copy-id username@your_vps_ip
 ```
 
+Windows:
+
+```bash
+type id_ed25519.pub | ssh username@your_vps_ip "mkdir ~/.ssh && cat >> ~/.ssh/authorized_keys"
+```
+
 ### Use Short Hostnames for Easier Connections
 
-Instead of typing `ssh username@192.168.1.0`, you can define a short alias.
+Instead of typing `ssh username@your_vps_ip`, you can define a short alias.
 
 Edit or create the SSH config file on your local machine:
 
@@ -66,7 +75,7 @@ Add an entry:
 
 ```
 Host myvps
-    HostName 192.168.1.0
+    HostName your_vps_ip
     User username
     IdentityFile ~/.ssh/vps_ed25519
 ```
