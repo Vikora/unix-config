@@ -36,16 +36,20 @@ usermod -aG sudo username
 
 ## Configure SSH Access
 
-### Copy Your SSH Key
+### Generate SSH Key
 
 On your local machine, generate a key:
 
 ```bash
-cd .ssh
+cd ~/.ssh
+```
+```bash
 ssh-keygen -t ed25519 -C "your_email@example.com"
 ```
 Enter file in which to save the key (/home/user/.ssh/id_ed25519).
 Enter passphrase for "id_ed25519" (empty for no passphrase).
+
+### Copy SSH Key to VPS
 
 Copy the public key to your VPS.
 
@@ -111,6 +115,13 @@ Set or update the following lines:
 PermitRootLogin no
 PasswordAuthentication no
 ```
+PermitRootLogin options:
+
+`prohibit-password` → allows root login only via SSH key, not password.
+
+`yes` → allows root login with password (not recommended).
+
+`no` → disables root login entirely.
 
 Restart SSH service:
 
