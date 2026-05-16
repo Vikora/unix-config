@@ -8,31 +8,16 @@ From your local machine:
 ssh root@your_vps_ip
 ```
 
+
 ## Install Essential Packages
 
 Update packages and install useful tools:
 
 ```bash
-apt update && apt upgrade -y
+apt update && apt upgrade -y \
+&& apt install -y sudo vim git curl wget ufw
 ```
 
-```bash
-apt install -y sudo vim git curl wget ufw
-```
-
-## Create a New User
-
-It's best practice to avoid using `root` directly. Create a new user (replace `username` with your preferred login name):
-
-```bash
-adduser username
-```
-
-Grant the user administrative privileges:
-
-```bash
-usermod -aG sudo username
-```
 
 ## Configure SSH Access
 
@@ -56,50 +41,14 @@ Copy the public key to your VPS.
 Linux:
 
 ```bash
-ssh-copy-id username@your_vps_ip
+ssh-copy-id root@your_vps_ip
 ```
 
 Windows:
 
 ```bash
-type id_ed25519.pub | ssh username@your_vps_ip "mkdir ~/.ssh && cat >> ~/.ssh/authorized_keys"
+type id_ed25519.pub | ssh root@your_vps_ip "mkdir ~/.ssh && cat >> ~/.ssh/authorized_keys"
 ```
-
-### Use Short Hostnames for Easier Connections
-
-Instead of typing `ssh username@your_vps_ip`, you can define a short alias.
-
-Edit or create the SSH config file on your local machine:
-
-```bash
-vim ~/.ssh/config
-```
-
-Add an entry:
-
-```
-Host myvps
-    HostName your_vps_ip
-    User username
-    IdentityFile ~/.ssh/vps_ed25519
-```
-
-Now connect simply with:
-
-```bash
-ssh myvps
-```
-
-You can add as many servers as you like with different aliases.
-
-Alternative (local only, not recommended for multiple servers):
-You can add entries in `/etc/hosts` to map IP → name, e.g.
-
-```
-192.168.1.0 myvps
-```
-
-Then `ssh username@myvps` will also work.
 
 ### Disable Root and Password Login
 
@@ -135,7 +84,85 @@ Now reconnect as your new user:
 ssh username@your_vps_ip
 ```
 
----
+
+## Create a New User
+
+It's best practice to avoid using `root` directly. Create a new user (replace `username` with your preferred login name):
+
+```bash
+adduser username
+```
+
+Grant the user administrative privileges:
+
+```bash
+usermod -aG sudo username
+```
+
+### Reset password
+
+```bash
+passwd username
+```
+
+### Passwordless sudo
+
+```bash
+sudo visudo
+```
+
+Add:
+```bash
+username ALL=(ALL) NOPASSWD:ALL
+```
+
+### Copy ssh key to the non-root user.
+
+```bash
+export USER=username
+mkdir -p /home/$USER/.ssh
+cp ~/.ssh/authorized_keys /home/$USER/.ssh/
+chown -R $USER:$USER /home/$USER/.ssh
+chmod 700 /home/$USER/.ssh
+chmod 600 /home/$USER/.ssh/authorized_keys
+```
+
+## Use Short Hostnames for Easier Connections
+
+Instead of typing `ssh username@your_vps_ip`, you can define a short alias.
+
+Edit or create the SSH config file on your local machine:
+
+```bash
+vim ~/.ssh/config
+```
+
+Add an entry:
+
+```
+Host myvps
+    HostName your_vps_ip
+    User username
+    IdentityFile ~/.ssh/vps_ed25519
+```
+
+Now connect simply with:
+
+```bash
+ssh myvps
+```
+
+You can add as many servers as you like with different aliases.
+
+Alternative (local only, not recommended for multiple servers):
+You can add entries in `/etc/hosts` to map IP → name, e.g.
+
+```
+192.168.1.0 myvps
+```
+
+Then `ssh username@myvps` will also work.
+
 
 ## 5. Configure Firewall (UFW)
 
