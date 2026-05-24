@@ -96,7 +96,7 @@ adduser username
 Grant the user administrative privileges:
 
 ```bash
-usermod -aG sudo username
+/usr/sbin/usermod -aG sudo username
 ```
 
 ### Reset password
@@ -119,12 +119,12 @@ username ALL=(ALL) NOPASSWD:ALL
 ### Copy ssh key to the non-root user.
 
 ```bash
-export USER=username
-mkdir -p /home/$USER/.ssh
-cp ~/.ssh/authorized_keys /home/$USER/.ssh/
-chown -R $USER:$USER /home/$USER/.ssh
-chmod 700 /home/$USER/.ssh
-chmod 600 /home/$USER/.ssh/authorized_keys
+export USERNAME=username
+mkdir -p /home/$USERNAME/.ssh
+cp ~/.ssh/authorized_keys /home/$USERNAME/.ssh/
+chown -R $USERNAME:$USERNAME /home/$USERNAME/.ssh
+chmod 700 /home/$USERNAME/.ssh
+chmod 600 /home/$USERNAME/.ssh/authorized_keys
 ```
 
 ## Use Short Hostnames for Easier Connections
