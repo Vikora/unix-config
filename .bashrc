@@ -90,6 +90,10 @@ fi
 
 unset use_color safe_term match_lhs sh
 
+#
+# ALIAS
+#
+alias ls='ls -alh --color=auto --group-directories-first'
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
